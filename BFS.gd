@@ -52,6 +52,10 @@
 # Returns the value at the specified position from the given map
 # Returns null if the position is out of bounds
 
+# get_size(map : Array) -> Vector2
+# Returns the size of the map
+# Returns Vector2.ZERO if the map array is empty
+
 # map_to_string(map : Array) -> String
 # Returns a visual of a map as a string
 # Values equal to the INFINITY constant are represented with an "x"
@@ -208,6 +212,12 @@ func get_tile(map : Array, position : Vector2):
 	if not is_in_bounds(map, position):
 		return null
 	return map[position.y][position.x]
+	
+
+func get_size(map : Array) -> Vector2:
+	if map.is_empty():
+		return Vector2.ZERO
+	return Vector2(map[0].size(), map.size())
 
 
 func map_to_string(map : Array) -> String:
@@ -232,4 +242,5 @@ func is_adjacent(pos1 : Vector2, pos2 : Vector2) -> bool:
 func is_in_bounds(map : Array, position : Vector2) -> bool:
 	if map.is_empty():
 		return false
-	return Rect2(0, 0, map[0].size(), map.size()).has_point(position)
+	var size : Vector2 = get_size(map)
+	return Rect2(0, 0, size.x, size.y).has_point(position)
