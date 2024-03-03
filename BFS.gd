@@ -19,6 +19,7 @@
 
 # calculate_pathmap(start_position : Vector2, move_points : int) -> bool
 # Calculates valid move tiles and their costs from a starting position
+# Moves with the same cost will be randomly chosen from
 # Returns false if the map size is 0 x 0
 
 # calculate_path(destination : Vector2) -> Array
@@ -144,7 +145,7 @@ func calculate_path(destination : Vector2) -> Array:
 	# Start at the destination and work backwards to the start
 	while current != start:
 		var lowest : int = INFINITY
-		var direction : Vector2 = Vector2.ZERO
+		var directions : Array = []
 		var neighbors : Array = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
 		
 		# Check all four neighboring tiles
@@ -156,10 +157,13 @@ func calculate_path(destination : Vector2) -> Array:
 				var value : int = get_tile(pathmap, nb)
 				
 				# Store direction if it is the lowest value
+				if value == lowest:
+					directions.append(i)
 				if value < lowest:
 					lowest = value
-					direction = i
+					directions = [i]
 				
+		var direction : Vector2 = directions[randi_range(0, directions.size() - 1)]
 		current += direction
 		inverted_path.append(direction)
 		
