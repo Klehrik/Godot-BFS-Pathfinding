@@ -44,11 +44,13 @@
 # create_map(size : Vector2, value = 0) -> Array
 # Returns a 2D map of the specified size, populated by the given value (default 0)
 
-# set_tile(map : Array, position : Vector2, value) -> void
+# set_tile(map : Array, position : Vector2, value) -> bool
 # Sets a tile of the specified map to a given value
+# Returns false if the position is out of bounds
 
 # get_tile(map : Array, position : Vector2)
 # Returns the value at the specified position from the given map
+# Returns null if the position is out of bounds
 
 # map_to_string(map : Array) -> String
 # Returns a visual of a map as a string
@@ -195,11 +197,16 @@ func create_map(size : Vector2, value = 0) -> Array:
 	return map
 	
 
-func set_tile(map : Array, position : Vector2, value) -> void:
+func set_tile(map : Array, position : Vector2, value) -> bool:
+	if not is_in_bounds(map, position):
+		return false
 	map[position.y][position.x] = value
+	return true
 	
 
 func get_tile(map : Array, position : Vector2):
+	if not is_in_bounds(map, position):
+		return null
 	return map[position.y][position.x]
 
 
@@ -207,13 +214,13 @@ func map_to_string(map : Array) -> String:
 	var text : String = ""
 	for y in map:
 		for x in y:
-			var char = x
-			if char == INFINITY:
-				char = "x"
-			char = str(char)
-			if char.length() == 1:
-				char = "  " + char
-			text += char + " "
+			var chr = x
+			if chr == INFINITY:
+				chr = "x"
+			chr = str(chr)
+			if chr.length() == 1:
+				chr = "  " + chr
+			text += chr + " "
 		text += "\n"
 	return text
 
