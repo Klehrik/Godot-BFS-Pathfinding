@@ -1,5 +1,5 @@
 ### General purpose BFS for orthogonal pathfinding
-## By Klehrik	Created Feb 29, 2024	Updated Mar 1, 2024
+## By Klehrik	Created Feb 29, 2024	Updated Mar 3, 2024
 
 ## Constants
 # INFINITY : int		An integer of value 1,000,000,000
@@ -39,6 +39,8 @@
 
 
 ## General
+# General purpose 2D map scripts for many uses
+
 # create_map(size : Vector2, value = 0) -> Array
 # Returns a 2D map of the specified size, populated by the given value (default 0)
 
@@ -51,6 +53,12 @@
 # map_to_string(map : Array) -> String
 # Returns a visual of a map as a string
 # Values equal to the INFINITY constant are represented with an "x"
+
+# is_adjacent(pos1 : Vector2, pos2 : Vector2) -> bool
+# Returns true if the two positions are adjacent orthogonally
+
+# is_in_bounds(map : Array, position : Vector2) -> bool
+# Returns true if the specified position is within the given map
 
 
 # =============================
@@ -176,7 +184,6 @@ func copy(other : Node) -> bool:
 
 
 # ========== GENERAL ==========
-# Anything can make use of these
 
 func create_map(size : Vector2, value = 0) -> Array:
 	var map : Array = []
@@ -209,3 +216,13 @@ func map_to_string(map : Array) -> String:
 			text += char + " "
 		text += "\n"
 	return text
+
+
+func is_adjacent(pos1 : Vector2, pos2 : Vector2) -> bool:
+	return (pos1 - pos2).length() == 1
+
+
+func is_in_bounds(map : Array, position : Vector2) -> bool:
+	if map.is_empty():
+		return false
+	return Rect2(0, 0, map[0].size(), map.size()).has_point(position)
